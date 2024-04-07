@@ -16,5 +16,9 @@ def main():
     ]
     return render_template("index.html", titulo=titulo, usuarios=usuarios)
 
+@app.route("/pauloGay")
+def paulo():
+    return "paulo"
+
 #execução
 app.run(debug=True)
