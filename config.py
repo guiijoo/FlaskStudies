@@ -16,4 +16,4 @@ def configure_routes(app):
 
 def configure_db():
     db.connect()
-    db.create_table([Cliente])
+    db.create_tables([Cliente])
