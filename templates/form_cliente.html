@@ -5,7 +5,11 @@
             action="{{ url_for('cliente.inserir_cliente') }}" 
         {% endif %}
 
-        method="{% if cliente %}PUT{% else %}POST{% endif %}"
+        method="{% if cliente %}
+                    PUT
+                {% else %}
+                    POST
+                {% endif %}"
 
         {% if cliente %}
             c-swap="#cliente-{{cliente.id}}"
