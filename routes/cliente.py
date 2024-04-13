@@ -35,34 +35,27 @@ def form_cliente():
 def detalhe_cliente(cliente_id):
     """ exibir detalhes do cliente """
     
-    cliente = list(filter(lambda c: c['id'] == cliente_id, CLIENTES))[0]
+    cliente = Cliente.get_by_id(cliente_id)
     return render_template('detalhe_cliente.html', cliente=cliente)
     
 
 @cliente_route.route('/<int:cliente_id>/edit')
 def form_edit_cliente(cliente_id):
     """ formulario para editar um cliente """
-    cliente = None
-    for c in CLIENTES:
-        if c['id'] == cliente_id:
-            cliente = c
     
+    cliente = Cliente.get_by_id(cliente_id)
     return render_template('form_cliente.html', cliente=cliente)
 
 @cliente_route.route('/<int:cliente_id>/update', methods=['PUT'])
 def atualizar_cliente(cliente_id):
     """ atualizar informacoes do cliente """
-    cliente_editado = None
-    # obter dados do formulario de edicao
+
     data = request.json
-    
-    # obter usuario pelo id
-    for c in CLIENTES:
-        if c['id'] == cliente_id:
-            c['nome'] = data['nome']
-            c['email'] = data['email']
-            
-            cliente_editado = c
+
+    cliente_editado = Cliente.get_by_id(cliente_id)
+    cliente_editado.nome = data['nome']
+    cliente_editado.email = data['email']
+    cliente_editado.save()
             
     # editar usuario
     return render_template('item_cliente.html', cliente=cliente_editado)
@@ -70,6 +63,8 @@ def atualizar_cliente(cliente_id):
 
 @cliente_route.route('/<int:cliente_id>/delete', methods=['DELETE'])
 def deletar_cliente(cliente_id):   
-    global CLIENTES
-    CLIENTES = [ c for c in CLIENTES if c['id'] != cliente_id ]
-    return {'deleted': 'ok'}
+    
+    cliente = Cliente.get_by_id(cliente_id)
+    cliente.delete_instance()
+    
+    return{"delete": 'ok'}
